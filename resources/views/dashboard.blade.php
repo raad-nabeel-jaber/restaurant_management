@@ -1,17 +1,17 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@push('head')
+    <script>
+        window.__DASHBOARD__ = @json($dashboardClient);
+    </script>
+@endpush
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+<x-dashboard-layout
+    :title="__('نظرة عامة')"
+    :restaurant="$restaurant"
+    :menu-url="$menuUrl"
+    :pending-orders-count="$pendingOrdersCount"
+>
+    @include('dashboard.partials.page-header')
+    @include('dashboard.partials.stats')
+    @include('dashboard.partials.chart-qr')
+    @include('dashboard.partials.bottom-row')
+</x-dashboard-layout>

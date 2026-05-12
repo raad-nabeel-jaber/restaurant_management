@@ -1,66 +1,116 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+<x-guest-layout :title="__('إنشاء حساب').' — '.config('app.name')">
+    <div class="auth-card-header">
+        <h1 class="auth-title">{{ __('إنشاء حساب جديد') }}</h1>
+        <p class="auth-subtitle">{{ __('أنشئ حساب المطعم وابدأ بإدارة قائمتك وطلباتك بسهولة.') }}</p>
+    </div>
+
+    <form class="auth-form auth-form--register" method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('الاسم الكامل')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <label for="name" class="auth-label">{{ __('الاسم الكامل') }}</label>
+            <input
+                id="name"
+                name="name"
+                type="text"
+                value="{{ old('name') }}"
+                required
+                autofocus
+                autocomplete="name"
+                class="auth-input"
+                placeholder="{{ __('أدخل اسمك الكامل') }}"
+            />
+            @error('name')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('البريد الإلكتروني')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div>
+            <label for="email" class="auth-label">{{ __('البريد الإلكتروني') }}</label>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                value="{{ old('email') }}"
+                required
+                autocomplete="username"
+                class="auth-input"
+                placeholder="name@example.com"
+            />
+            @error('email')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Restaurant Name -->
-        <div class="mt-4">
-            <x-input-label for="restaurant_name" :value="__('اسم المطعم')" />
-            <x-text-input id="restaurant_name" class="block mt-1 w-full" type="text" name="restaurant_name" :value="old('restaurant_name')" required />
-            <x-input-error :messages="$errors->get('restaurant_name')" class="mt-2" />
+        <div>
+            <label for="restaurant_name" class="auth-label">{{ __('اسم المطعم') }}</label>
+            <input
+                id="restaurant_name"
+                name="restaurant_name"
+                type="text"
+                value="{{ old('restaurant_name') }}"
+                required
+                class="auth-input"
+                placeholder="{{ __('مثال: مطعم الشيف') }}"
+            />
+            @error('restaurant_name')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- WhatsApp Number -->
-        <div class="mt-4">
-            <x-input-label for="whatsapp_number" :value="__('رقم الواتساب')" />
-            <x-text-input id="whatsapp_number" class="block mt-1 w-full" type="text" name="whatsapp_number" :value="old('whatsapp_number')" required />
-            <x-input-error :messages="$errors->get('whatsapp_number')" class="mt-2" />
+        <div>
+            <label for="whatsapp_number" class="auth-label">{{ __('رقم الواتساب') }}</label>
+            <input
+                id="whatsapp_number"
+                name="whatsapp_number"
+                type="text"
+                value="{{ old('whatsapp_number') }}"
+                required
+                class="auth-input"
+                placeholder="{{ __('مثال: 0790000000') }}"
+            />
+            @error('whatsapp_number')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('كلمة المرور')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="auth-label">{{ __('كلمة المرور') }}</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                autocomplete="new-password"
+                class="auth-input"
+                placeholder="••••••••"
+            />
+            @error('password')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('تأكيد كلمة المرور')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div>
+            <label for="password_confirmation" class="auth-label">{{ __('تأكيد كلمة المرور') }}</label>
+            <input
+                id="password_confirmation"
+                name="password_confirmation"
+                type="password"
+                required
+                autocomplete="new-password"
+                class="auth-input"
+                placeholder="••••••••"
+            />
+            @error('password_confirmation')
+                <p class="auth-error">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('لديك حساب بالفعل؟') }}
-            </a>
+        <button type="submit" class="auth-btn-primary">{{ __('تسجيل') }}</button>
 
-            <x-primary-button class="ms-4">
-                {{ __('تسجيل') }}
-            </x-primary-button>
-        </div>
+        <p class="auth-switch">
+            {{ __('لديك حساب بالفعل؟') }}
+            <a href="{{ route('login') }}">{{ __('تسجيل الدخول') }}</a>
+        </p>
     </form>
 </x-guest-layout>

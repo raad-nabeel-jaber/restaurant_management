@@ -1,0 +1,248 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        font-family: 'Cairo', sans-serif !important;
+    }
+}
+
+@layer components {
+    /** لوحات: ظل ناعم بدل حدود قاسية + حركة خفيفة */
+    .dash-card {
+        @apply rounded-2xl bg-[#13151c] shadow-lg shadow-black/30 ring-1 ring-white/[0.06] transition-all duration-300 ease-in-out;
+    }
+
+    .dash-card-hover:hover {
+        @apply shadow-xl shadow-black/40 ring-white/[0.1];
+    }
+
+    .brand-gradient {
+        background: linear-gradient(135deg, #f5a623, #e8821a);
+        box-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+    }
+
+    .shadow-brand {
+        box-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+    }
+
+    .dashboard-sidebar-panel {
+        background: #13151a;
+        border-left: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-item {
+        @apply mb-0.5 flex cursor-pointer items-center gap-3 rounded-[10px] px-4 py-2.5 text-sm font-semibold no-underline transition-all duration-300 ease-in-out;
+        color: #7a7875;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #f0ece3;
+    }
+
+    .nav-item.active {
+        border: 1px solid rgba(245, 166, 35, 0.2);
+        background: rgba(245, 166, 35, 0.12);
+        color: #f5a623;
+    }
+
+    .nav-item .nav-icon {
+        @apply flex-shrink-0 text-lg;
+    }
+
+    .badge-pending {
+        background: rgba(245, 166, 35, 0.15);
+        color: #f5a623;
+    }
+
+    .badge-accepted {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+    }
+
+    .badge-cancelled {
+        background: rgba(239, 68, 68, 0.12);
+        color: #f87171;
+    }
+
+    .status-badge {
+        @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold;
+    }
+
+    .status-dot {
+        @apply h-1.5 w-1.5 rounded-full;
+        background: currentColor;
+    }
+
+    .notif-badge {
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        display: flex;
+        height: 18px;
+        width: 18px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 2px solid #1a1d23;
+        background: #f87171;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text);
+    }
+
+    @keyframes livePulse {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: scale(0.8);
+        }
+    }
+
+    .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #25d366;
+        animation: livePulse 1.8s ease infinite;
+    }
+
+    [drawer-backdrop] {
+        background-color: rgba(14, 15, 18, 0.55) !important;
+        background-color: oklch(0.12 0.02 78 / 0.55) !important;
+    }
+
+    .field-input {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #1e2028;
+        padding: 10px 14px;
+        font-size: 14px;
+        color: #f0ece3;
+        transition:
+            border-color 0.3s ease-in-out,
+            background-color 0.3s ease-in-out,
+            box-shadow 0.3s ease-in-out;
+    }
+
+    .field-input::placeholder {
+        color: #55524f;
+    }
+
+    .field-input:focus {
+        border-color: rgba(245, 166, 35, 0.5);
+        background: #252830;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.22);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .field-input {
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+    }
+
+    .sec-label {
+        padding: 8px 16px 4px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #55524f;
+    }
+
+    .order-items-preview {
+        word-break: break-word;
+    }
+
+    .order-action-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .order-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: 100%;
+        border-radius: 8px;
+        padding: 6px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+        white-space: nowrap;
+        transition:
+            background-color 0.15s var(--ease-out-expo),
+            border-color 0.15s var(--ease-out-expo),
+            color 0.15s var(--ease-out-expo),
+            transform 0.15s var(--ease-out-expo),
+            box-shadow 0.15s var(--ease-out-expo);
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+    .order-action-btn--detail {
+        border-color: rgba(245, 166, 35, 0.45);
+        background: rgba(245, 166, 35, 0.12);
+        color: #fbbf24;
+    }
+
+    .order-action-btn--detail:hover {
+        background: rgba(245, 166, 35, 0.22);
+        border-color: rgba(251, 191, 36, 0.65);
+        color: #fde68a;
+    }
+
+    .order-action-btn--accept {
+        border-color: rgba(37, 211, 102, 0.5);
+        background: rgba(37, 211, 102, 0.12);
+        color: #4ade80;
+    }
+
+    .order-action-btn--accept:hover {
+        background: rgba(37, 211, 102, 0.22);
+        border-color: rgba(74, 222, 128, 0.7);
+        color: #86efac;
+    }
+
+    .order-action-btn--cancel {
+        border-color: rgba(248, 113, 113, 0.55);
+        background: rgba(239, 68, 68, 0.16);
+        color: #f87171;
+    }
+
+    .order-action-btn--cancel:hover {
+        background: rgba(239, 68, 68, 0.26);
+        border-color: rgba(252, 165, 165, 0.75);
+        color: #fca5a5;
+    }
+}
+
+@layer utilities {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: var(--bg4);
+    }
+}

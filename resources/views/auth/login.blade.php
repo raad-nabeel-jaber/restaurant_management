@@ -1,47 +1,59 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<x-guest-layout :title="__('تسجيل الدخول').' — '.config('app.name')">
+    <div class="auth-card-header">
+        <h1 class="auth-title">{{ __('تسجيل الدخول') }}</h1>
+        <p class="auth-subtitle">{{ __('أدخل بريدك وكلمة المرور للمتابعة إلى لوحة التحكم.') }}</p>
+    </div>
 
-    <form method="POST" action="{{ route('login') }}">
+    <x-auth-session-status class="auth-flash-success" :status="session('status')" />
+
+    <form class="auth-form" method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('البريد الإلكتروني')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <label for="email" class="auth-label">{{ __('البريد الإلكتروني') }}</label>
+            <input
+                id="email"
+                class="auth-input"
+                type="email"
+                name="email"
+                value="{{ old('email') }}"
+                required
+                autofocus
+                autocomplete="username"
+            />
+            <x-input-error :messages="$errors->get('email')" class="auth-error" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('كلمة المرور')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="auth-label">{{ __('كلمة المرور') }}</label>
+            <input
+                id="password"
+                class="auth-input"
+                type="password"
+                name="password"
+                required
+                autocomplete="current-password"
+            />
+            <x-input-error :messages="$errors->get('password')" class="auth-error" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('تذكرني') }}</span>
-            </label>
-        </div>
+        <label class="auth-check">
+            <input id="remember_me" type="checkbox" name="remember">
+            <span>{{ __('تذكرني') }}</span>
+        </label>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="auth-actions-row">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('هل نسيت كلمة المرور؟') }}
-                </a>
+                <a class="auth-link" href="{{ route('password.request') }}">{{ __('هل نسيت كلمة المرور؟') }}</a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('تسجيل الدخول') }}
-            </x-primary-button>
+            <button type="submit" class="auth-btn-primary">{{ __('تسجيل الدخول') }}</button>
         </div>
     </form>
+
+    @if (Route::has('register'))
+        <p class="auth-switch">
+            {{ __('ليس لديك حساب؟') }}
+            <a href="{{ route('register') }}">{{ __('إنشاء حساب') }}</a>
+        </p>
+    @endif
 </x-guest-layout>

@@ -11,7 +11,7 @@ class UpdateOrderStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->restaurant !== null;
+        return auth()->check();
     }
 
     /**

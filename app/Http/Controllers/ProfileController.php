@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Concerns\ExposesDashboardNav;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,14 +12,18 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    use ExposesDashboardNav;
+
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        $nav = $this->dashboardNav();
+
+        return view('profile.edit', array_merge($nav, [
             'user' => $request->user(),
-        ]);
+        ]));
     }
 
     /**
@@ -26,13 +31,35 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+        $user->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        $restaurant = $user->getOrCreateRestaurant();
+        $slug = $validated['slug'] !== '' ? $validated['slug'] : $restaurant->slug;
+
+        $restaurant->fill([
+            'name' => $validated['restaurant_name'],
+            'slug' => $slug,
+            'whatsapp_number' => $validated['whatsapp_number'] ?? '',
+            'is_active' => $request->boolean('is_active'),
+            'order_method' => $validated['order_method'],
+        ]);
+
+        if ($request->exists('whatsapp_orders_enabled')) {
+            $restaurant->whatsapp_orders_enabled = $request->boolean('whatsapp_orders_enabled');
+        }
+        $restaurant->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

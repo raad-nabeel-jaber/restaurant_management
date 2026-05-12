@@ -1,0 +1,55 @@
+/**
+ * Shared UI tokens — warm ink + amber (Impeccable-aligned).
+ * Hex first for legacy engines; OKLCH overrides where supported.
+ */
+:root {
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --bg: #0e0f12;
+    --bg: oklch(0.145 0.012 78);
+    --bg2: #13151a;
+    --bg2: oklch(0.172 0.014 78);
+    --bg3: #1a1d23;
+    --bg3: oklch(0.205 0.016 78);
+    --bg4: #22262e;
+    --bg4: oklch(0.245 0.018 78);
+
+    --text: #f0ece3;
+    --text: oklch(0.94 0.012 78);
+    --text2: #9a9690;
+    --text2: oklch(0.72 0.014 78);
+    --text3: #5c5955;
+    --text3: oklch(0.52 0.012 78);
+
+    --amber: #f5a623;
+    --amber: oklch(0.78 0.15 72);
+    --amber-deep: #e8821a;
+    --amber-deep: oklch(0.68 0.14 68);
+    --amber-dim: rgba(245, 166, 35, 0.14);
+    --amber-glow: rgba(245, 166, 35, 0.12);
+    --amber-ink: #1a1408;
+    --amber-ink: oklch(0.22 0.03 72);
+
+    --green: #25d366;
+    --green: oklch(0.72 0.19 155);
+    --green-dim: #128c7e;
+    --green-glow: rgba(37, 211, 102, 0.12);
+
+    --border: rgba(255, 255, 255, 0.075);
+    --border2: rgba(255, 255, 255, 0.12);
+
+    --radius: 16px;
+    --radius-sm: 10px;
+
+    --overlay-scrim: rgba(14, 15, 18, 0.78);
+
+    --safe-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    --safe-top: max(0px, env(safe-area-inset-top, 0px));
+    --phone-max: 430px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --ease-out-expo: ease;
+    }
+}

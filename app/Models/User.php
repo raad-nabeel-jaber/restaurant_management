@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -34,5 +35,24 @@ class User extends Authenticatable
     public function restaurant(): HasOne
     {
         return $this->hasOne(Restaurant::class);
+    }
+
+    /**
+     * Users created outside registration (seeders, legacy) may lack a restaurant row.
+     */
+    public function getOrCreateRestaurant(): Restaurant
+    {
+        if ($this->restaurant) {
+            return $this->restaurant;
+        }
+
+        return $this->restaurant()->create([
+            'name' => $this->name,
+            'slug' => Str::slug($this->name).'-'.$this->id.'-'.uniqid(),
+            'whatsapp_number' => '',
+            'is_active' => true,
+            'order_method' => Restaurant::ORDER_METHOD_WHATSAPP,
+            'whatsapp_orders_enabled' => true,
+        ]);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -16,7 +15,7 @@ class ProductController extends Controller
      */
     private function getRestaurant()
     {
-        return auth()->user()->restaurant;
+        return auth()->user()->getOrCreateRestaurant();
     }
 
     /**

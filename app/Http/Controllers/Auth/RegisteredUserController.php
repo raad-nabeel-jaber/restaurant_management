@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
@@ -50,6 +51,8 @@ class RegisteredUserController extends Controller
             'slug' => Str::slug($request->restaurant_name) . '-' . uniqid(),
             'whatsapp_number' => $request->whatsapp_number,
             'is_active' => true,
+            'order_method' => Restaurant::ORDER_METHOD_WHATSAPP,
+            'whatsapp_orders_enabled' => true,
         ]);
 
         event(new Registered($user));

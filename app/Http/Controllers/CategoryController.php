@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     private function getRestaurant()
     {
-        return auth()->user()->restaurant;
+        return auth()->user()->getOrCreateRestaurant();
     }
 
     /**

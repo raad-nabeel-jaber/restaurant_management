@@ -7,8 +7,10 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Restaurant;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class MenuController extends Controller
 {
@@ -41,7 +43,7 @@ class MenuController extends Controller
     /**
      * Return customer-facing menu data based on scanned barcode value.
      */
-    public function show(string $barcode): JsonResponse
+    public function show(Request $request, string $barcode): JsonResponse|View
     {
         $restaurant = $this->findRestaurantByBarcode($barcode)?->load([
             'categories' => function ($query) {
@@ -57,10 +59,24 @@ class MenuController extends Controller
         ]);
 
         if (! $restaurant) {
+            if (! $request->wantsJson()) {
+                abort(404);
+            }
+
             return response()->json([
                 'message' => 'المطعم غير موجود أو غير مفعل.',
             ], 404);
         }
+
+        if (! $request->wantsJson()) {
+            return view('menu.public', [
+                'barcode' => $barcode,
+            ]);
+        }
+
+        $orderMethod = in_array($restaurant->order_method, Restaurant::ORDER_METHODS, true)
+            ? $restaurant->order_method
+            : Restaurant::ORDER_METHOD_WHATSAPP;
 
         return response()->json([
             'restaurant' => [
@@ -69,6 +85,9 @@ class MenuController extends Controller
                 'slug' => $restaurant->slug,
                 'logo' => $this->fullMediaUrl($restaurant->logo),
                 'whatsapp_number' => $restaurant->whatsapp_number,
+                'order_method' => $orderMethod,
+                'whatsapp_orders_enabled' => (bool) $restaurant->whatsapp_orders_enabled,
+                'checkout_method' => $restaurant->customerCheckoutMethod(),
             ],
             'categories' => $restaurant->categories->map(function ($category) {
                 return [
@@ -91,7 +110,7 @@ class MenuController extends Controller
     }
 
     /**
-     * Store a customer order and return WhatsApp URL.
+     * Store a customer order: WhatsApp redirect URL, or silent dashboard flow per restaurant.order_method.
      */
     public function storeOrder(StoreMenuOrderRequest $request, string $barcode): JsonResponse
     {
@@ -162,6 +181,17 @@ class MenuController extends Controller
             return $order->load('items.product');
         });
 
+        $restaurant->refresh();
+
+        if ($restaurant->customerCheckoutMethod() === Restaurant::ORDER_METHOD_DASHBOARD) {
+            return response()->json([
+                'status' => 'success',
+                'method' => 'dashboard',
+                'message' => 'تم استلام طلبك بنجاح وجاري تجهيزه!',
+                'order_id' => $order->id,
+            ], 201);
+        }
+
         $messageLines = [
             "طلب جديد #{$order->id}",
             "الاسم: {$order->customer_name}",
@@ -185,13 +215,16 @@ class MenuController extends Controller
         $messageLines[] = 'الإجمالي: '.number_format((float) $order->total_price, 2);
 
         $restaurantPhone = preg_replace('/\D+/', '', $restaurant->whatsapp_number ?? '');
-        $whatsAppUrl = "https://wa.me/{$restaurantPhone}?text=".rawurlencode(implode("\n", $messageLines));
+        $redirectUrl = "https://wa.me/{$restaurantPhone}?text=".rawurlencode(implode("\n", $messageLines));
 
         return response()->json([
+            'status' => 'success',
+            'method' => 'whatsapp',
             'message' => 'تم استلام الطلب بنجاح.',
             'order_id' => $order->id,
             'total_price' => (float) $order->total_price,
-            'whatsapp_url' => $whatsAppUrl,
+            'redirect_url' => $redirectUrl,
+            'whatsapp_url' => $redirectUrl,
         ], 201);
     }
 }
