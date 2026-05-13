@@ -23,7 +23,7 @@
                 </div>
 
                 <div>
-                    <label for="price" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('السعر (ر.س)') }}</label>
+                    <label for="price" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('السعر (د.أ)') }}</label>
                     <input type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price') }}" class="field-input mt-1" required>
                     @error('price')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -47,7 +47,7 @@
 
                 <div>
                     <label for="image" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('صورة المنتج') }}</label>
-                    <input type="file" name="image" id="image" accept="image/*" class="mt-1 block w-full cursor-pointer text-sm text-[#9a9690] file:mr-4 file:rounded-lg file:border-0 file:bg-[#f5a623] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[#1a1000] hover:file:bg-[#fbb935]">
+                    <input type="file" name="image" id="image" accept="image/*" class="mt-1 block w-full cursor-pointer text-sm text-[#9a9690] file:ml-4 file:rounded-lg file:border-0 file:bg-[#f5a623] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[#1a1000] hover:file:bg-[#fbb935]">
                     @error('image')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                     @enderror

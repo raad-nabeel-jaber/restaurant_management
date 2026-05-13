@@ -151,7 +151,7 @@ function renderOrders() {
       </td>
       <td class="min-w-0 px-3 py-3 align-top">${formatItemsTableCell(o.items)}</td>
       <td class="min-w-0 px-3 py-3 align-top"><span class="text-xs font-bold text-[#f0ece3]">${typ.icon} ${typ.text}</span></td>
-      <td class="min-w-0 px-3 py-3 align-top"><span class="font-bold text-[#f0ece3]">${Number(o.total_price).toFixed(2)}</span></td>
+      <td class="min-w-0 px-3 py-3 align-top"><span class="font-bold text-[#f0ece3]">${Number(o.total_price).toFixed(2)} د.أ</span></td>
       <td class="min-w-0 px-3 py-3 align-top"><span class="text-xs text-[#9a9690]">${formatTime(o.created_at)}</span></td>
       <td class="min-w-0 px-3 py-3 align-top">
         <span class="status-badge ${s.cls}">
@@ -391,7 +391,7 @@ function openOrderModal(id) {
       </div>
       <div class="flex items-center justify-between rounded-lg border border-white/5 bg-[#131519] p-3">
         <span class="text-sm text-[#9a9690]">الإجمالي</span>
-        <span class="text-lg font-black text-[#f5a623]">${Number(o.total_price).toFixed(2)}</span>
+        <span class="text-lg font-black text-[#f5a623]">${Number(o.total_price).toFixed(2)} د.أ</span>
       </div>
       <div class="flex items-center justify-between rounded-lg border border-white/5 bg-[#131519] p-3">
         <span class="text-sm text-[#9a9690]">الحالة</span>

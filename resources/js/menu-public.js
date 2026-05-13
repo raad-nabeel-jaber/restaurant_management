@@ -10,7 +10,14 @@ function renderRestaurant() {
     document.getElementById('restaurantName').textContent = state.restaurant?.name || 'المنيو';
     document.getElementById('restaurantSubtext').textContent = 'مفتوح الآن';
     const cover = document.getElementById('restaurantCover');
-    cover.src = state.restaurant?.logo || 'https://placehold.co/900x400?text=Menu';
+    cover.src = state.restaurant?.cover_image || 'https://placehold.co/900x400?text=Menu';
+
+    const logoEl = document.getElementById('restaurantLogoEmoji');
+    if (state.restaurant?.logo) {
+        logoEl.innerHTML = `<img src="${state.restaurant.logo}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+    } else {
+        logoEl.innerHTML = '🍽️';
+    }
 }
 
 function renderTabs() {

@@ -36,10 +36,10 @@
                         class="mt-1 text-[2.1rem] font-black leading-none tabular-nums sm:text-4xl"
                         style="color: var(--amber)"
                     >
-                        {{ number_format($todayRevenue, 1) }}
+                        {{ number_format($todayRevenue, 1) }} <span class="text-xs font-bold opacity-70">د.أ</span>
                     </p>
                     <p class="mt-2 text-xs" style="color: var(--text2)">
-                        {{ __('متوسط الطلب: :avg', ['avg' => number_format($todayAvgOrder, 1)]) }}
+                        {{ __('متوسط الطلب: :avg د.أ', ['avg' => number_format($todayAvgOrder, 1)]) }}
                     </p>
                 </div>
             </div>

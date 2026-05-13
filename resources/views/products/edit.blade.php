@@ -24,7 +24,7 @@
                 </div>
 
                 <div>
-                    <label for="price" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('السعر (ر.س)') }}</label>
+                    <label for="price" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('السعر (د.أ)') }}</label>
                     <input type="number" step="0.01" min="0" name="price" id="price" value="{{ old('price', $product->price) }}" class="field-input mt-1" required>
                     @error('price')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -54,7 +54,7 @@
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-12 w-12 rounded-lg border border-white/[0.07] object-cover">
                             </div>
                         @endif
-                        <input type="file" name="image" id="image" accept="image/*" class="block w-full cursor-pointer text-sm text-[#9a9690] file:mr-4 file:rounded-lg file:border-0 file:bg-[#f5a623] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[#1a1000] hover:file:bg-[#fbb935]">
+                        <input type="file" name="image" id="image" accept="image/*" class="block w-full cursor-pointer text-sm text-[#9a9690] file:ml-4 file:rounded-lg file:border-0 file:bg-[#f5a623] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[#1a1000] hover:file:bg-[#fbb935]">
                     </div>
                     @if($product->image)
                         <p class="mt-1 text-xs text-[#9a9690]">{{ __('ارفع صورة جديدة فقط إذا كنت تريد تغيير الصورة الحالية.') }}</p>

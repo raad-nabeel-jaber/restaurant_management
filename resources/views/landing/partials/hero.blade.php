@@ -34,8 +34,7 @@
     </div>
 
     <div class="hero-stats">
-        <div class="stat-item"><span class="stat-num">+500</span><div class="stat-label">مطعم يستخدم المنصة</div></div>
-        <div class="stat-divider"></div>
+
         <div class="stat-item"><span class="stat-num">0%</span><div class="stat-label">عمولة على الطلبات</div></div>
         <div class="stat-divider"></div>
         <div class="stat-item"><span class="stat-num">3 دقائق</span><div class="stat-label">وقت الإعداد</div></div>

@@ -56,7 +56,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 font-bold text-[#f5a623]">
-                                {{ number_format($product->price, 2) }} {{ __('ر.س') }}
+                                {{ number_format($product->price, 2) }} {{ __('د.أ') }}
                             </td>
                             <td class="px-6 py-4">
                                 @if($product->is_available)

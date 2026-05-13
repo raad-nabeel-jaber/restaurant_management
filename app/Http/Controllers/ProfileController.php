@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -59,6 +60,21 @@ class ProfileController extends Controller
         if ($request->exists('whatsapp_orders_enabled')) {
             $restaurant->whatsapp_orders_enabled = $request->boolean('whatsapp_orders_enabled');
         }
+
+        if ($request->hasFile('logo')) {
+            if ($restaurant->logo && Storage::disk('public')->exists($restaurant->logo)) {
+                Storage::disk('public')->delete($restaurant->logo);
+            }
+            $restaurant->logo = $request->file('logo')->store('restaurants', 'public');
+        }
+
+        if ($request->hasFile('cover_image')) {
+            if ($restaurant->cover_image && Storage::disk('public')->exists($restaurant->cover_image)) {
+                Storage::disk('public')->delete($restaurant->cover_image);
+            }
+            $restaurant->cover_image = $request->file('cover_image')->store('restaurants', 'public');
+        }
+
         $restaurant->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');

@@ -41,6 +41,8 @@ class ProfileUpdateRequest extends FormRequest
             'whatsapp_orders_enabled' => ['sometimes', 'boolean'],
             'is_active' => ['sometimes', 'boolean'],
             'order_method' => ['required', 'string', 'in:whatsapp,dashboard'],
+            'logo' => ['nullable', 'image', 'max:2048'],
+            'cover_image' => ['nullable', 'image', 'max:2048'],
         ];
     }
 

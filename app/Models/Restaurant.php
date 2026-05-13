@@ -27,6 +27,7 @@ class Restaurant extends Model
         'slug',
         'whatsapp_number',
         'logo',
+        'cover_image',
         'is_active',
         'order_method',
         'whatsapp_orders_enabled',

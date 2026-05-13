@@ -28,9 +28,9 @@ class DemoMenuSeeder extends Seeder
             ['id' => 1],
             [
                 'user_id' => $owner->id,
-                'name' => 'برجر هاوس — عرض تجريبي',
-                'slug' => 'burger-house-demo-1',
-                'whatsapp_number' => '966501234567',
+                'name' => 'برجر هاوس',
+                'slug' => 'burger-house',
+                'whatsapp_number' => '962795105700',
                 'logo' => null,
                 'is_active' => true,
                 'order_method' => 'whatsapp',
@@ -53,13 +53,13 @@ class DemoMenuSeeder extends Seeder
         ]);
 
         foreach ([
-            ['category_id' => $mains->id, 'name' => 'برجر كلاسيك', 'description' => 'لحم بلدي، جبنة شيدر، خس، مخلل، صوص المنزل.', 'price' => '28.50'],
-            ['category_id' => $mains->id, 'name' => 'برجر مشروم', 'description' => 'فطر سوتيه، جبنة سويسرية، مايونيز بالثوم المعتق.', 'price' => '32.00'],
-            ['category_id' => $mains->id, 'name' => 'تشيز برجر بالهالابينو', 'description' => 'نكهة حارة متوازنة مع صوص الباربكيو.', 'price' => '30.75'],
-            ['category_id' => $mains->id, 'name' => 'دجاج كرسبي سبايسي', 'description' => 'كتف دجاج مقرمش، مخللات، سلطات كرنب.', 'price' => '24.90'],
-            ['category_id' => $sides->id, 'name' => 'بطاطس وجبنة وفطر', 'description' => 'بطاطس مقلية مع جبنة وفطر مهروس ومزينة بالأعشاب.', 'price' => '16.00'],
-            ['category_id' => $sides->id, 'name' => 'حلقات بصل', 'description' => 'مقرمشة من الخارج، طرية من الداخل.', 'price' => '12.50'],
-            ['category_id' => $sides->id, 'name' => 'ليمون نعناع مثلج', 'description' => 'منعش، يُنصح مع الوجبات الحارة.', 'price' => '9.00'],
+            ['category_id' => $mains->id, 'name' => 'برجر كلاسيك', 'description' => 'لحم بلدي، جبنة شيدر، خس، مخلل، صوص المنزل.', 'price' => '4.50'],
+            ['category_id' => $mains->id, 'name' => 'برجر مشروم', 'description' => 'فطر سوتيه، جبنة سويسرية، مايونيز بالثوم المعتق.', 'price' => '5.50'],
+            ['category_id' => $mains->id, 'name' => 'تشيز برجر بالهالابينو', 'description' => 'نكهة حارة متوازنة مع صوص الباربكيو.', 'price' => '5.00'],
+            ['category_id' => $mains->id, 'name' => 'دجاج كرسبي سبايسي', 'description' => 'كتف دجاج مقرمش، مخللات، سلطات كرنب.', 'price' => '4.00'],
+            ['category_id' => $sides->id, 'name' => 'بطاطس وجبنة وفطر', 'description' => 'بطاطس مقلية مع جبنة وفطر مهروس ومزينة بالأعشاب.', 'price' => '2.50'],
+            ['category_id' => $sides->id, 'name' => 'حلقات بصل', 'description' => 'مقرمشة من الخارج، طرية من الداخل.', 'price' => '2.00'],
+            ['category_id' => $sides->id, 'name' => 'ليمون نعناع مثلج', 'description' => 'منعش، يُنصح مع الوجبات الحارة.', 'price' => '1.50'],
         ] as $row) {
             Product::create([
                 'restaurant_id' => 1,

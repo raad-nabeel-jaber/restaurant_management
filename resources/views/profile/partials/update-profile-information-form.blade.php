@@ -14,7 +14,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -25,6 +25,36 @@
                     <label for="restaurant_name" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('اسم المطعم') }}</label>
                     <input id="restaurant_name" name="restaurant_name" type="text" class="field-input" value="{{ old('restaurant_name', $restaurant->name) }}" required autocomplete="organization">
                     @error('restaurant_name')
+                        <p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="logo" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('شعار المطعم (لوجو)') }}</label>
+                    <div class="mt-1 flex items-center gap-4">
+                        @if($restaurant->logo)
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('storage/' . $restaurant->logo) }}" alt="Logo" class="h-12 w-12 rounded-lg border border-white/[0.07] object-cover bg-white">
+                            </div>
+                        @endif
+                        <input type="file" name="logo" id="logo" accept="image/*" class="block w-full text-sm text-[#9a9690] file:ml-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#f5a623] file:text-[#1a1000] hover:file:bg-[#fbb935] cursor-pointer">
+                    </div>
+                    @error('logo')
+                        <p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="cover_image" class="mb-1.5 block text-sm font-medium text-[#f0ece3]">{{ __('صورة غلاف المطعم') }}</label>
+                    <div class="mt-1 flex items-center gap-4">
+                        @if($restaurant->cover_image)
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('storage/' . $restaurant->cover_image) }}" alt="Cover" class="h-12 w-24 rounded-lg border border-white/[0.07] object-cover">
+                            </div>
+                        @endif
+                        <input type="file" name="cover_image" id="cover_image" accept="image/*" class="block w-full text-sm text-[#9a9690] file:ml-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#f5a623] file:text-[#1a1000] hover:file:bg-[#fbb935] cursor-pointer">
+                    </div>
+                    @error('cover_image')
                         <p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

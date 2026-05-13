@@ -51,7 +51,7 @@
            target="_blank"
            rel="noopener noreferrer"
            class="hidden items-center gap-2 rounded-lg bg-[#f5a623] px-4 py-2 text-sm font-bold text-[#1a1000] hover:bg-[#fbb935] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/35 sm:inline-flex">
-            <span>📱</span> {{ __('منيوي') }}
+            <span>📱</span> {{ __('المنيو الخاص بي') }}
         </a>
     </div>
 </header>

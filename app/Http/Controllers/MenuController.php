@@ -84,6 +84,7 @@ class MenuController extends Controller
                 'name' => $restaurant->name,
                 'slug' => $restaurant->slug,
                 'logo' => $this->fullMediaUrl($restaurant->logo),
+                'cover_image' => $this->fullMediaUrl($restaurant->cover_image),
                 'whatsapp_number' => $restaurant->whatsapp_number,
                 'order_method' => $orderMethod,
                 'whatsapp_orders_enabled' => (bool) $restaurant->whatsapp_orders_enabled,
