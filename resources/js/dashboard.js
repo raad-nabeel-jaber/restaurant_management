@@ -125,7 +125,7 @@ function renderOrders() {
     if (!data.length) {
         const emptyMsg =
             ordersMeta.total > 0 ? 'لا طلبات في هذا التبويب' : 'لا طلبات بعد';
-        body.innerHTML = `<tr class="border-b border-white/[0.05] bg-[#17191f]"><td colspan="8" class="px-6 py-8 text-center text-[#9a9690]">${emptyMsg}</td></tr>`;
+        body.innerHTML = `<tr class="border-b border-white/[0.07] bg-[#17191f]"><td colspan="8" class="px-6 py-8 text-center text-[#9a9690]">${emptyMsg}</td></tr>`;
         if (footer) footer.textContent = '—';
         return;
     }
@@ -136,7 +136,7 @@ function renderOrders() {
             const typ = formatType(o);
             const name0 = esc((o.customer_name || '?')[0]);
             return `
-    <tr data-id="${o.id}" data-status="${o.status}" class="border-b border-white/[0.05] bg-[#17191f] transition-all duration-200 ease-in-out hover:bg-white/[0.07]">
+    <tr data-id="${o.id}" data-status="${o.status}" class="border-b border-white/[0.07] bg-[#17191f] hover:bg-white/[0.04]">
       <td class="min-w-0 px-3 py-3 align-top"><span class="text-sm font-black text-[#f5a623]">#${o.id}</span></td>
       <td class="min-w-0 px-3 py-3 align-top">
         <div class="flex min-w-0 items-start gap-2">
@@ -151,7 +151,7 @@ function renderOrders() {
       </td>
       <td class="min-w-0 px-3 py-3 align-top">${formatItemsTableCell(o.items)}</td>
       <td class="min-w-0 px-3 py-3 align-top"><span class="text-xs font-bold text-[#f0ece3]">${typ.icon} ${typ.text}</span></td>
-      <td class="min-w-0 px-3 py-3 align-top"><span class="font-bold text-[#f0ece3]">${Number(o.total_price).toFixed(2)} د.أ</span></td>
+      <td class="min-w-0 px-3 py-3 align-top"><span class="font-bold text-[#f0ece3]">${Number(o.total_price).toFixed(2)}</span></td>
       <td class="min-w-0 px-3 py-3 align-top"><span class="text-xs text-[#9a9690]">${formatTime(o.created_at)}</span></td>
       <td class="min-w-0 px-3 py-3 align-top">
         <span class="status-badge ${s.cls}">
@@ -160,29 +160,18 @@ function renderOrders() {
         </span>
       </td>
       <td class="min-w-0 px-2 py-3 align-top">
-        <div class="flex items-center justify-center space-x-3 space-x-reverse">
-          <button type="button" data-open-order="${o.id}" class="rounded-lg p-1 text-[#f5a623] transition-all duration-300 ease-in-out hover:scale-110 hover:text-[#fbb935] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/45" title="عرض تفاصيل الطلب كاملة" aria-label="تفاصيل الطلب">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-            </svg>
+        <div class="order-action-stack">
+          <button type="button" data-open-order="${o.id}" class="order-action-btn border border-[#f5a623]/50 bg-[#f5a623]/15 text-[#fbbf24] hover:bg-[#f5a623]/25 hover:text-[#fde68a]" title="عرض تفاصيل الطلب كاملة" aria-label="تفاصيل الطلب">
+            <span aria-hidden="true">👁</span><span>تفاصيل</span>
           </button>
           ${
               o.status === 'pending'
-                  ? `<button type="button" data-patch-order="${o.id}" data-next="accepted" class="rounded-lg p-1 text-emerald-400 transition-all duration-300 ease-in-out hover:scale-110 hover:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400/40" title="قبول الطلب والبدء بالتحضير" aria-label="قبول الطلب">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                      </button>`
+                  ? `<button type="button" data-patch-order="${o.id}" data-next="accepted" class="order-action-btn border border-[#25d366]/55 bg-[#25d366]/15 text-[#4ade80] hover:bg-[#25d366]/25 hover:text-[#86efac]" title="قبول الطلب والبدء بالتحضير" aria-label="قبول الطلب"><span aria-hidden="true">✓</span><span>قبول</span></button>`
                   : ''
           }
           ${
               o.status === 'pending' || o.status === 'accepted'
-                  ? `<button type="button" data-patch-order="${o.id}" data-next="cancelled" class="rounded-lg p-1 text-red-400 transition-all duration-300 ease-in-out hover:scale-110 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-400/40" title="إلغاء الطلب" aria-label="إلغاء الطلب">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                      </button>`
+                  ? `<button type="button" data-patch-order="${o.id}" data-next="cancelled" class="order-action-btn border border-[#f87171]/60 bg-[#ef4444]/20 text-[#f87171] hover:bg-[#ef4444]/30 hover:text-[#fca5a5]" title="إلغاء الطلب" aria-label="إلغاء الطلب"><span aria-hidden="true">✕</span><span>إلغاء</span></button>`
                   : ''
           }
         </div>
@@ -231,7 +220,7 @@ async function fetchOrders(options = {}) {
             const body = document.getElementById('ordersBody');
             if (body) {
                 body.innerHTML =
-                    '<tr class="border-b border-white/[0.05] bg-[#17191f]"><td colspan="8" class="px-6 py-8 text-center text-red-400">خطأ في التحميل</td></tr>';
+                    '<tr class="border-b border-white/[0.07] bg-[#17191f]"><td colspan="8" class="px-6 py-8 text-center text-red-400">خطأ في التحميل</td></tr>';
             }
         }
     }
@@ -391,7 +380,7 @@ function openOrderModal(id) {
       </div>
       <div class="flex items-center justify-between rounded-lg border border-white/5 bg-[#131519] p-3">
         <span class="text-sm text-[#9a9690]">الإجمالي</span>
-        <span class="text-lg font-black text-[#f5a623]">${Number(o.total_price).toFixed(2)} د.أ</span>
+        <span class="text-lg font-black text-[#f5a623]">${Number(o.total_price).toFixed(2)}</span>
       </div>
       <div class="flex items-center justify-between rounded-lg border border-white/5 bg-[#131519] p-3">
         <span class="text-sm text-[#9a9690]">الحالة</span>
@@ -410,11 +399,11 @@ function setFilterTabActive(filter) {
     document.querySelectorAll('[data-order-filters] [data-filter]').forEach((btn) => {
         const on = btn.getAttribute('data-filter') === filter;
         if (on) {
-            btn.classList.add('bg-[#f5a623]', 'text-[#1a1000]', 'shadow-md');
-            btn.classList.remove('text-[#9a9690]', 'hover:bg-white/5', 'hover:shadow-sm');
+            btn.classList.add('bg-[#f5a623]', 'text-[#1a1000]', 'shadow-sm');
+            btn.classList.remove('text-[#9a9690]', 'hover:bg-white/5');
         } else {
-            btn.classList.remove('bg-[#f5a623]', 'text-[#1a1000]', 'shadow-sm', 'shadow-md');
-            btn.classList.add('text-[#9a9690]', 'hover:bg-white/5', 'hover:shadow-sm');
+            btn.classList.remove('bg-[#f5a623]', 'text-[#1a1000]', 'shadow-sm');
+            btn.classList.add('text-[#9a9690]', 'hover:bg-white/5');
         }
     });
 }

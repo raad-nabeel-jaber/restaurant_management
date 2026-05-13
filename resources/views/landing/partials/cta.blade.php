@@ -9,6 +9,6 @@
         @else
             <a href="{{ route('register') }}" class="btn-hero-primary">🚀 ابدأ مجاناً — 30 يوم</a>
         @endauth
-        <a href="#" class="whatsapp-btn">💬 تحدث معنا</a>
+        <a href="https://wa.me/962795105700" target="_blank" class="whatsapp-btn">💬 تحدث معنا</a>
     </div>
 </section>
