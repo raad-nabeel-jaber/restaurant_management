@@ -145,7 +145,16 @@ function setType(type) {
     state.type = type;
     document.querySelectorAll('.type-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.type === type));
     document.getElementById('tableField').classList.toggle('show', type === 'dine_in');
-    document.getElementById('addressField').style.display = type === 'delivery' ? 'flex' : 'none';
+    
+    const addrField = document.getElementById('addressField');
+    const addrInput = document.getElementById('custAddress');
+    
+    addrField.style.display = type === 'delivery' ? 'flex' : 'none';
+    if (type === 'delivery') {
+        addrInput.setAttribute('required', '');
+    } else {
+        addrInput.removeAttribute('required');
+    }
 }
 
 /** @returns {'whatsapp'|'dashboard'} */
@@ -197,6 +206,7 @@ async function submitOrder(event) {
         customer_name: document.getElementById('custName').value.trim(),
         customer_phone: document.getElementById('custPhone').value.trim(),
         delivery_type: state.type,
+        customer_address: state.type === 'delivery' ? document.getElementById('custAddress').value.trim() : null,
         table_number: state.type === 'dine_in' ? document.getElementById('custTable').value.trim() : null,
         items: cartItems().map((i) => ({ product_id: i.id, quantity: i.qty })),
     };

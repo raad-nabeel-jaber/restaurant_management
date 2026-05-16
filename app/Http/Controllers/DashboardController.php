@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Concerns\ExposesDashboardNav;
+use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Restaurant;
 use Carbon\Carbon;
@@ -25,11 +26,11 @@ class DashboardController extends Controller
 
         $today = now()->startOfDay();
         $todayOrdersCount = $restaurant->orders()->whereDate('created_at', $today)->count();
-        $acceptedOrdersCount = $restaurant->orders()->where('status', 'accepted')->count();
+        $acceptedOrdersCount = $restaurant->orders()->where('status', Order::STATUS_ACCEPTED)->count();
 
         $todayPaidQuery = $restaurant->orders()
             ->whereDate('created_at', $today)
-            ->where('status', '!=', 'cancelled');
+            ->where('status', '!=', Order::STATUS_CANCELLED);
         $todayRevenue = (float) (clone $todayPaidQuery)->sum('total_price');
         $todayNonCancelledCount = (clone $todayPaidQuery)->count();
         $todayAvgOrder = $todayNonCancelledCount > 0 ? $todayRevenue / $todayNonCancelledCount : 0.0;
@@ -67,7 +68,7 @@ class DashboardController extends Controller
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->where('orders.restaurant_id', $restaurant->id)
-            ->where('orders.status', '!=', 'cancelled')
+            ->where('orders.status', '!=', Order::STATUS_CANCELLED)
             ->groupBy('products.id', 'products.name')
             ->selectRaw('products.name as name, SUM(order_items.quantity) as sold')
             ->orderByDesc('sold')

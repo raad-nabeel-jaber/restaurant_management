@@ -13,7 +13,7 @@ Route::get('/', function () {
 });
 
 Route::get('/menu/{barcode}', [MenuController::class, 'show'])->name('menu.show');
-Route::post('/menu/{barcode}/order', [MenuController::class, 'storeOrder'])->name('menu.order.store');
+Route::post('/menu/{barcode}/order', [MenuController::class, 'storeOrder'])->middleware('throttle:10,1')->name('menu.order.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

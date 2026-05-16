@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Concerns\ExposesDashboardNav;
 use App\Http\Requests\UpdateOrderStatusRequest;
+use App\Models\Order;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class OrderController extends Controller
             'ordersIndex' => route('orders.data'),
             'orderStatusUrl' => route('orders.update-status', ['id' => '__ORDER_ID__']),
             'checkNewOrdersUrl' => route('orders.checkNew'),
-            'initialPendingCount' => $restaurant->orders()->where('status', 'pending')->count(),
+            'initialPendingCount' => $restaurant->orders()->where('status', Order::STATUS_PENDING)->count(),
             'ordersListLimit' => self::ORDER_INDEX_DEFAULT_LIMIT,
         ];
 
@@ -40,7 +41,7 @@ class OrderController extends Controller
     {
         $restaurant = auth()->user()->getOrCreateRestaurant();
 
-        $count = $restaurant->orders()->where('status', 'pending')->count();
+        $count = $restaurant->orders()->where('status', Order::STATUS_PENDING)->count();
 
         return response()->json([
             'new_orders_count' => $count,
@@ -55,7 +56,7 @@ class OrderController extends Controller
         $restaurant = auth()->user()->getOrCreateRestaurant();
 
         $status = $request->query('status');
-        $allowedStatuses = ['pending', 'accepted', 'cancelled'];
+        $allowedStatuses = Order::STATUSES;
 
         $limit = (int) $request->query('limit', self::ORDER_INDEX_DEFAULT_LIMIT);
         $limit = max(10, min($limit, self::ORDER_INDEX_MAX_LIMIT));
@@ -82,6 +83,7 @@ class OrderController extends Controller
                     'id' => $order->id,
                     'customer_name' => $order->customer_name,
                     'customer_phone' => $order->customer_phone,
+                    'customer_address' => $order->customer_address,
                     'delivery_type' => $order->delivery_type,
                     'table_number' => $order->table_number,
                     'total_price' => (float) $order->total_price,

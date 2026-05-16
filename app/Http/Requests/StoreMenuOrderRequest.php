@@ -24,6 +24,7 @@ class StoreMenuOrderRequest extends FormRequest
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:30'],
             'delivery_type' => ['required', 'in:delivery,dine_in'],
+            'customer_address' => ['nullable', 'string', 'max:500', 'required_if:delivery_type,delivery'],
             'table_number' => ['nullable', 'string', 'max:50', 'required_if:delivery_type,dine_in'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],

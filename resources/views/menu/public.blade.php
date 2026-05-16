@@ -76,7 +76,7 @@
                                 <div class="field"><label class="field-label">الاسم</label><input type="text" id="custName" name="customer_name" placeholder="اسمك الكريم" required></div>
                                 <div class="field"><label class="field-label">رقم الهاتف</label><input type="tel" id="custPhone" name="customer_phone" placeholder="07X XXX XXXX" required></div>
                             </div>
-                            <div class="field" id="addressField"><label class="field-label">عنوان التوصيل (اختياري)</label><input type="text" id="custAddress" placeholder="الحي، الشارع، رقم البيت..."></div>
+                            <div class="field" id="addressField"><label class="field-label">عنوان التوصيل</label><input type="text" id="custAddress" placeholder="الحي، الشارع، رقم البيت..." required></div>
                             <div class="field table-field" id="tableField"><label class="field-label">رقم الطاولة</label><input type="number" id="custTable" name="table_number" placeholder="مثال: 7" min="1"></div>
                             <div class="field"><label class="field-label">ملاحظات (اختياري)</label><textarea id="custNotes" placeholder="بدون بصل، إضافة صلصة حارة..."></textarea></div>
                         </div>

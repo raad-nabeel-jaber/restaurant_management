@@ -163,10 +163,11 @@ class MenuController extends Controller
                 'restaurant_id' => $restaurant->id,
                 'customer_name' => $validated['customer_name'],
                 'customer_phone' => $validated['customer_phone'],
+                'customer_address' => $validated['delivery_type'] === 'delivery' ? ($validated['customer_address'] ?? null) : null,
                 'delivery_type' => $validated['delivery_type'],
                 'table_number' => $validated['delivery_type'] === 'dine_in' ? ($validated['table_number'] ?? null) : null,
                 'total_price' => $totalPrice,
-                'status' => 'pending',
+                'status' => Order::STATUS_PENDING,
             ]);
 
             $order->items()->createMany(
@@ -199,6 +200,10 @@ class MenuController extends Controller
             "رقم العميل: {$order->customer_phone}",
             'نوع الطلب: '.($order->delivery_type === 'delivery' ? 'توصيل' : 'داخل المطعم'),
         ];
+        
+        if ($order->delivery_type === 'delivery' && $order->customer_address) {
+            $messageLines[] = "العنوان: {$order->customer_address}";
+        }
 
         if ($order->delivery_type === 'dine_in' && $order->table_number) {
             $messageLines[] = "رقم الطاولة: {$order->table_number}";

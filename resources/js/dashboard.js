@@ -39,6 +39,8 @@ let currentFilter = 'all';
 let currentOrderId = null;
 let ordersPollTimer = null;
 let ordersMeta = { total: 0, limit: 50, returned: 0 };
+let currentPage = 1;
+const ITEMS_PER_PAGE = 10;
 
 /** فاصل تحديث جدول الطلبات (مباشر بدون زر تحديث) */
 const ORDERS_POLL_MS = 8000;
@@ -122,15 +124,22 @@ function renderOrders() {
 
     const data = [...orders];
 
+    const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+    if (currentPage > totalPages && totalPages > 0) {
+        currentPage = totalPages;
+    }
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
     if (!data.length) {
-        const emptyMsg =
-            ordersMeta.total > 0 ? 'لا طلبات في هذا التبويب' : 'لا طلبات بعد';
+        const emptyMsg = ordersMeta.total > 0 ? 'لا طلبات في هذا التبويب' : 'لا طلبات بعد';
         body.innerHTML = `<tr class="border-b border-white/[0.07] bg-[#17191f]"><td colspan="8" class="px-6 py-8 text-center text-[#9a9690]">${emptyMsg}</td></tr>`;
         if (footer) footer.textContent = '—';
+        document.getElementById('orders-pagination')?.classList.add('hidden');
         return;
     }
 
-    body.innerHTML = data
+    body.innerHTML = paginatedData
         .map((o) => {
             const s = STATUS_MAP[o.status] || STATUS_MAP.pending;
             const typ = formatType(o);
@@ -160,20 +169,18 @@ function renderOrders() {
         </span>
       </td>
       <td class="min-w-0 px-2 py-3 align-top">
-        <div class="order-action-stack">
-          <button type="button" data-open-order="${o.id}" class="order-action-btn border border-[#f5a623]/50 bg-[#f5a623]/15 text-[#fbbf24] hover:bg-[#f5a623]/25 hover:text-[#fde68a]" title="عرض تفاصيل الطلب كاملة" aria-label="تفاصيل الطلب">
-            <span aria-hidden="true">👁</span><span>تفاصيل</span>
+        <div class="flex flex-row items-center justify-center gap-3">
+          <button type="button" data-open-order="${o.id}" class="flex items-center justify-center w-8 h-8 rounded-[10px] bg-[#f5a623]/20 text-[#f5a623] hover:bg-[#f5a623]/30 hover:scale-110 transition-all shadow-[0_0_10px_rgba(245,166,35,0.15)]" title="عرض تفاصيل الطلب" aria-label="تفاصيل الطلب">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/><path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
           </button>
-          ${
-              o.status === 'pending'
-                  ? `<button type="button" data-patch-order="${o.id}" data-next="accepted" class="order-action-btn border border-[#25d366]/55 bg-[#25d366]/15 text-[#4ade80] hover:bg-[#25d366]/25 hover:text-[#86efac]" title="قبول الطلب والبدء بالتحضير" aria-label="قبول الطلب"><span aria-hidden="true">✓</span><span>قبول</span></button>`
-                  : ''
-          }
-          ${
-              o.status === 'pending' || o.status === 'accepted'
-                  ? `<button type="button" data-patch-order="${o.id}" data-next="cancelled" class="order-action-btn border border-[#f87171]/60 bg-[#ef4444]/20 text-[#f87171] hover:bg-[#ef4444]/30 hover:text-[#fca5a5]" title="إلغاء الطلب" aria-label="إلغاء الطلب"><span aria-hidden="true">✕</span><span>إلغاء</span></button>`
-                  : ''
-          }
+          ${o.status === 'pending'
+                    ? `<button type="button" data-patch-order="${o.id}" data-next="accepted" class="flex items-center justify-center w-8 h-8 rounded-[10px] bg-[#25d366]/20 text-[#25d366] hover:bg-[#25d366]/30 hover:scale-110 transition-all shadow-[0_0_10px_rgba(37,211,102,0.15)]" title="قبول الطلب" aria-label="قبول الطلب"><svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 11.917 9.724 16.5 19 7.5"/></svg></button>`
+                    : ''
+                }
+          ${o.status === 'pending'
+                    ? `<button type="button" data-patch-order="${o.id}" data-next="cancelled" class="flex items-center justify-center w-8 h-8 rounded-[10px] bg-[#ef4444]/20 text-[#f87171] hover:bg-[#ef4444]/30 hover:scale-110 transition-all shadow-[0_0_10px_rgba(248,113,113,0.15)]" title="إلغاء الطلب" aria-label="إلغاء الطلب"><svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18 17.94 6M18 18 6.06 6"/></svg></button>`
+                    : ''
+                }
         </div>
       </td>
     </tr>`;
@@ -181,12 +188,38 @@ function renderOrders() {
         .join('');
 
     if (footer) {
-        const { total, limit } = ordersMeta;
+        const { total } = ordersMeta;
         const n = data.length;
-        if (total > n) {
-            footer.textContent = `يُعرض ${n} من أصل ${total} طلب (حد أقصى ${limit} لكل تحديث)`;
+        if (n > 0) {
+            footer.textContent = `عرض ${startIndex + 1} - ${Math.min(startIndex + ITEMS_PER_PAGE, n)} من أصل ${n} طلب${total > n ? ` (من ${total} في القاعدة)` : ''}`;
         } else {
-            footer.textContent = `عرض ${n} طلب${n === 1 ? '' : 'ات'}`;
+            footer.textContent = '—';
+        }
+    }
+
+    // Pagination UI
+    const nav = document.getElementById('orders-pagination');
+    const pagesContainer = document.getElementById('pagination-pages');
+    if (nav && pagesContainer) {
+        if (totalPages <= 1) {
+            nav.classList.add('hidden');
+        } else {
+            nav.classList.remove('hidden');
+            
+            const prevBtn = nav.querySelector('[data-paginate="prev"]');
+            const nextBtn = nav.querySelector('[data-paginate="next"]');
+            if (prevBtn) prevBtn.disabled = currentPage === 1;
+            if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+
+            let pagesHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    pagesHtml += `<button type="button" aria-current="page" data-paginate="${i}" class="z-10 flex h-8 items-center justify-center border border-[#f5a623]/30 bg-[#f5a623]/10 px-3 leading-tight text-[#f5a623] hover:bg-[#f5a623]/20 hover:text-[#fbbf24]">${i}</button>`;
+                } else {
+                    pagesHtml += `<button type="button" data-paginate="${i}" class="flex h-8 items-center justify-center border border-white/10 bg-[#17191f] px-3 leading-tight text-[#9a9690] hover:bg-white/5 hover:text-white">${i}</button>`;
+                }
+            }
+            pagesContainer.innerHTML = pagesHtml;
         }
     }
 }
@@ -374,6 +407,12 @@ function openOrderModal(id) {
         <span class="text-sm text-[#9a9690]">نوع الطلب</span>
         <span class="text-sm font-bold text-[#f0ece3]">${typ.icon} ${esc(typ.text)}</span>
       </div>
+      ${o.delivery_type === 'delivery' && o.customer_address ? `
+      <div class="rounded-lg border border-white/5 bg-[#131519] p-3">
+        <div class="mb-2 text-sm text-[#9a9690]">عنوان التوصيل</div>
+        <div class="text-sm font-bold text-[#f0ece3]">${esc(o.customer_address)}</div>
+      </div>
+      ` : ''}
       <div class="rounded-lg border border-white/5 bg-[#131519] p-3">
         <div class="mb-2 text-sm text-[#9a9690]">الأصناف</div>
         <div class="text-sm font-bold text-[#f0ece3]">${formatItems(o.items)}</div>
@@ -472,10 +511,28 @@ function bindEvents() {
         if (!btn) return;
         currentFilter = btn.getAttribute('data-filter');
         setFilterTabActive(currentFilter);
+        currentPage = 1;
         await fetchOrders({ silent: true });
     });
 
     document.body.addEventListener('click', (e) => {
+        const pageBtn = e.target.closest('[data-paginate]');
+        if (pageBtn) {
+            const action = pageBtn.getAttribute('data-paginate');
+            const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+                renderOrders();
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+                renderOrders();
+            } else if (!isNaN(action)) {
+                currentPage = Number(action);
+                renderOrders();
+            }
+            return;
+        }
+
         const openId = e.target.closest('[data-open-order]')?.getAttribute('data-open-order');
         if (openId) {
             openOrderModal(Number(openId));

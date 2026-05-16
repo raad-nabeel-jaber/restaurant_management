@@ -630,12 +630,14 @@ body {
   padding: 10px 8px;
   cursor: pointer;
   text-align: center;
+  color: var(--text);
   transition: transform .3s ease-in-out, background .25s ease, border-color .25s ease, box-shadow .3s ease-in-out
 }
 
 .type-btn.active {
   background: var(--amber-dim);
-  border-color: var(--amber)
+  border-color: var(--amber);
+  color: var(--amber);
 }
 
 .type-btn-label {

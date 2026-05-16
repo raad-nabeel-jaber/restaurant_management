@@ -11,10 +11,21 @@ class Order extends Model
 {
     use HasFactory;
 
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_CANCELLED = 'cancelled';
+
+    public const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_ACCEPTED,
+        self::STATUS_CANCELLED,
+    ];
+
     protected $fillable = [
         'restaurant_id',
         'customer_name',
         'customer_phone',
+        'customer_address',
         'delivery_type',
         'table_number',
         'total_price',

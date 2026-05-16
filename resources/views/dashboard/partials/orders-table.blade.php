@@ -59,7 +59,24 @@
         </table>
     </div>
 
-    <div class="mt-3 flex flex-col gap-2 border-t border-white/10 pt-3 sm:flex-row sm:items-center sm:justify-between">
-        <span class="text-xs text-[#9a9690]" data-orders-footer>{{ __('—') }}</span>
+    <div class="mt-4 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-4 sm:flex-row">
+        <span class="text-sm text-[#9a9690]" data-orders-footer>{{ __('—') }}</span>
+        <nav aria-label="Page navigation" class="hidden" id="orders-pagination">
+            <ul class="inline-flex -space-x-px text-sm">
+                <li>
+                    <button type="button" data-paginate="prev" class="flex h-8 items-center justify-center rounded-r-lg border border-white/10 bg-[#17191f] px-3 leading-tight text-[#9a9690] hover:bg-white/5 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                        السابق
+                    </button>
+                </li>
+                <li id="pagination-pages" class="flex">
+                    <!-- Page numbers injected by JS -->
+                </li>
+                <li>
+                    <button type="button" data-paginate="next" class="flex h-8 items-center justify-center rounded-l-lg border border-white/10 bg-[#17191f] px-3 leading-tight text-[#9a9690] hover:bg-white/5 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                        التالي
+                    </button>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
