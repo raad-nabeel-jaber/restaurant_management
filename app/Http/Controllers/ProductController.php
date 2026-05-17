@@ -61,14 +61,19 @@ class ProductController extends Controller
         $data['is_available'] = $request->has('is_available');
 
         if ($request->hasFile('image')) {
-            $imageFile = $request->file('image');
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read($imageFile);
-            $image->scaleDown(width: 800);
-            
-            $filename = 'products/' . uniqid() . '.webp';
-            Storage::disk('public')->put($filename, (string) $image->toWebp(80));
-            $data['image'] = $filename;
+            try {
+                $imageFile = $request->file('image');
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($imageFile);
+                $image->scaleDown(width: 800);
+
+                $filename = 'products/' . uniqid() . '.webp';
+                Storage::disk('public')->put($filename, (string) $image->toWebp(80));
+                $data['image'] = $filename;
+            } catch (\Throwable $e) {
+                // GD not available — store the original file without processing
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
         }
 
         $restaurant->products()->create($data);
@@ -122,15 +127,20 @@ class ProductController extends Controller
             if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
-            
-            $imageFile = $request->file('image');
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read($imageFile);
-            $image->scaleDown(width: 800);
-            
-            $filename = 'products/' . uniqid() . '.webp';
-            Storage::disk('public')->put($filename, (string) $image->toWebp(80));
-            $data['image'] = $filename;
+
+            try {
+                $imageFile = $request->file('image');
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($imageFile);
+                $image->scaleDown(width: 800);
+
+                $filename = 'products/' . uniqid() . '.webp';
+                Storage::disk('public')->put($filename, (string) $image->toWebp(80));
+                $data['image'] = $filename;
+            } catch (\Throwable $e) {
+                // GD not available — store the original file without processing
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
         }
 
         $product->update($data);
