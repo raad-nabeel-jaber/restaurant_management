@@ -370,7 +370,10 @@ function startGlobalPendingNotifications() {
 
 async function patchOrderStatus(id, status) {
     try {
-        await window.axios.patch(orderStatusUrl(id), { status });
+        await window.axios.post(orderStatusUrl(id), {
+            _method: 'PATCH',
+            status: status
+        });
         const s = STATUS_MAP[status];
         showToast(`${s?.icon || '✓'} طلب #${id} — ${s?.label || status}`);
         await fetchOrders();

@@ -142,6 +142,21 @@ section { position: relative; }
 @media (max-width: 768px) { .footer-main { flex-direction: column; gap: 48px; } .footer-nav { gap: 48px; flex-direction: column; } .footer-bottom { flex-direction: column; text-align: center; justify-content: center; } .footer-legal { justify-content: center; flex-wrap: wrap; } }
 ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 @media (max-width: 768px) { .nav-links { display: none; } .how-steps { grid-template-columns: 1fr; gap: 40px; } .how-steps::before { display: none; } .features-grid { grid-template-columns: 1fr; } .feat-card.big { grid-column: span 1; flex-direction: column; } .pricing-grid:not(.pricing-grid--single) { grid-template-columns: 1fr; } .phone-screen { grid-template-columns: repeat(2, 1fr); } .hero-stats { gap: 24px; } .stat-divider { display: none; } }
+
+/* ─── Navbar buttons on mobile ─── */
+@media (max-width: 640px) {
+    nav { padding: 0 4%; }
+    .nav-cta { gap: 8px; }
+    .btn-ghost { padding: 7px 13px; font-size: 13px; }
+    .btn-primary { padding: 7px 14px; font-size: 13px; }
+}
+
+@media (max-width: 420px) {
+    .logo-text { font-size: 17px; }
+    /* على الشاشات الضيقة جداً: اخفِ "تسجيل الدخول" وأبقِ "ابدأ مجاناً" فقط */
+    .btn-ghost { display: none; }
+    .btn-primary { padding: 8px 16px; font-size: 13px; white-space: nowrap; }
+}
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; } .reveal-delay-3 { transition-delay: 0.3s; }

@@ -38,7 +38,7 @@
         </div>
 
         <label class="auth-check">
-            <input id="remember_me" type="checkbox" name="remember">
+            <input id="remember_me" type="checkbox" name="remember" value="1">
             <span>{{ __('تذكرني') }}</span>
         </label>
 
